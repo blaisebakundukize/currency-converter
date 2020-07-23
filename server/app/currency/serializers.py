@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from core.models import BaseCurrency
+from core.models import BaseCurrency, ExchangeRate
 
 
 class BaseCurrencySerializer(serializers.ModelSerializer):
@@ -10,3 +10,14 @@ class BaseCurrencySerializer(serializers.ModelSerializer):
         model = BaseCurrency
         fields = ('id', 'base_currency', 'value')
         read_only_Fields = ('id',)
+
+
+class ExchangeRateSerializer(serializers.ModelSerializer):
+    """Serialize an ExchangeRate"""
+
+    class Meta:
+        model = ExchangeRate
+        fields = (
+            'id', 'currency', 'base_currency', 'value',
+        )
+        read_only_fields = ('id',)

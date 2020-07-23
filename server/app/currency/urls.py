@@ -6,6 +6,7 @@ from currency import views
 
 router = DefaultRouter()
 router.register('base', views.BaseCurrencyViewSet)
+router.register('exchange_rates', views.ExchangeRateViewSet)
 
 app_name = 'currency'
 

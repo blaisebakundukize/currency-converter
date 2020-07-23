@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from core.models import BaseCurrency
+from core.models import BaseCurrency, ExchangeRate
 
 from currency import serializers
 
@@ -33,6 +33,22 @@ class BaseCurrencyViewSet(viewsets.ModelViewSet):
     #     """Retrieve the base currencies"""
     #     queryset = self.queryset
     #     return queryset.filter(user=self.request.user).order_by('-base_currency')
+
+    def perform_create(self, serializer):
+        """Create a new base currency"""
+        serializer.save(user=self.request.user)
+
+
+class ExchangeRateViewSet(viewsets.ModelViewSet):
+    """Manage exchange rate in the database"""
+    serializer_class = serializers.ExchangeRateSerializer
+    queryset = ExchangeRate.objects.all()
+    permission_classes = (ActionBasedPermission,)
+    action_permissions = {
+        IsAuthenticated: ['update', 'partial_update', 'destroy', 'create'],
+        AllowAny: ['list', 'retrieve']
+    }
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
 
     def perform_create(self, serializer):
         """Create a new base currency"""
