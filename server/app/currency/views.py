@@ -18,38 +18,27 @@ class ActionBasedPermission(AllowAny):
         return False
 
 
-class BaseCurrencyViewSet(viewsets.ModelViewSet):
+class BaseViewSet(viewsets.ModelViewSet):
+    """Base view set for other view to inherent"""
+    permission_classes = (ActionBasedPermission,)
+    action_permissions = {
+        IsAuthenticated: ['update', 'partial_update', 'destroy', 'create'],
+        AllowAny: ['list', 'retrieve']
+    }
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+
+    def perform_create(self, serializer):
+        """Create a new base currency"""
+        serializer.save(user=self.request.user)
+
+
+class BaseCurrencyViewSet(BaseViewSet):
     """Manage base currency in the database"""
     serializer_class = serializers.BaseCurrencySerializer
     queryset = BaseCurrency.objects.all()
-    permission_classes = (ActionBasedPermission,)
-    action_permissions = {
-        IsAuthenticated: ['update', 'partial_update', 'destroy', 'create'],
-        AllowAny: ['list', 'retrieve']
-    }
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-
-    # def get_queryset(self):
-    #     """Retrieve the base currencies"""
-    #     queryset = self.queryset
-    #     return queryset.filter(user=self.request.user).order_by('-base_currency')
-
-    def perform_create(self, serializer):
-        """Create a new base currency"""
-        serializer.save(user=self.request.user)
 
 
-class ExchangeRateViewSet(viewsets.ModelViewSet):
+class ExchangeRateViewSet(BaseViewSet):
     """Manage exchange rate in the database"""
     serializer_class = serializers.ExchangeRateSerializer
     queryset = ExchangeRate.objects.all()
-    permission_classes = (ActionBasedPermission,)
-    action_permissions = {
-        IsAuthenticated: ['update', 'partial_update', 'destroy', 'create'],
-        AllowAny: ['list', 'retrieve']
-    }
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-
-    def perform_create(self, serializer):
-        """Create a new base currency"""
-        serializer.save(user=self.request.user)
