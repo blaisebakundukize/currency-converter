@@ -37,7 +37,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 class BaseCurrency(models.Model):
     """Base Currency object"""
     base_currency = models.CharField(max_length=255)
-    value = models.DecimalField(max_digits=20, decimal_places=2, default=1.00)
+    value = models.DecimalField(max_digits=5, decimal_places=2, default=1.00)
     date_created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -46,3 +46,20 @@ class BaseCurrency(models.Model):
 
     def __str__(self):
         return self.base_currency
+
+
+class ExchangeRate(models.Model):
+    """Currency object"""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    currency = models.CharField(max_length=255)
+    base_currency = models.ForeignKey(
+        BaseCurrency,
+        on_delete=models.CASCADE
+    )
+    value = models.DecimalField(max_digits=5, decimal_places=2)
+
+    def __str__(self):
+        return self.currency
