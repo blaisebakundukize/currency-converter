@@ -17,7 +17,7 @@ spec:
             - name: DB_PORT
               value: '5432'
             - name: DB_NAME
-              value: currency_converter
+              value: postgres
             - name: DB_PASS
               valueFrom:
                 secretKeyRef:
