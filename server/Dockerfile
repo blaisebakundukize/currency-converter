@@ -18,3 +18,7 @@ COPY ./app/ /app
 
 RUN adduser -D bblaise
 USER bblaise
+
+CMD ["python", "./manage.py", "runserver", "0.0.0.0:8000"]
+
+# CMD [ "python", "./manage.py", "runserver", "0.0.0.0:8000", "--settings=mysite.settings.prod" ]
