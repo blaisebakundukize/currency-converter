@@ -128,6 +128,10 @@ li {
   border: 1px solid var(--color-primary);
 }
 
+.form-input:disabled {
+  cursor: not-allowed;
+}
+
 .form__control {
   display: flex;
   flex-direction: row;
@@ -146,4 +150,23 @@ li {
 .new-currency-info {
   font-size: 2.3rem;
   text-align: center;
+}
+
+.loading {
+  font-size: 2rem;
+  text-align: center;
+}
+
+select:required:invalid {
+  color: var(--color-grey-dark-2);
+  font-style: italic;
+}
+
+option[value=""][disabled] {
+  display: none;
+}
+
+option {
+  color: var(--color-black);
+  font-style: normal;
 }
