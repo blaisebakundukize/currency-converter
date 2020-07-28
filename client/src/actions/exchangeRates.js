@@ -15,8 +15,18 @@ export const receiveExchangeRates = (exRates) => {
 
 export const handleReceiveExchangeRates = () => {
   return (dispatch) => {
-    return axios.get("/api/currency/exchange_rates").then((response) => {
-      dispatch(receiveExchangeRates(response.data));
-    });
+    dispatch(
+      receiveExchangeRates([
+        {
+          id: 1,
+          currency: "rwf",
+          base_currency: 1,
+          value: "980.00",
+        },
+      ])
+    );
+    // return axios.get("/api/currency/exchange_rates").then((response) => {
+    //   dispatch(receiveExchangeRates(response.data));
+    // });
   };
 };
