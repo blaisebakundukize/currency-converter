@@ -32,8 +32,9 @@ class ExchangePage extends Component {
 
   render() {
     const { optionOne, optionTwo } = this.state.inputs;
-    const { exchangeRates } = this.props;
+    const { exchangeRates, baseCurrencies } = this.props;
     console.log(exchangeRates);
+    console.log(baseCurrencies);
     return (
       <div>
         <form className='form' onSubmit={this.handleSubmit}>
@@ -91,8 +92,9 @@ class ExchangePage extends Component {
   }
 }
 
-const mapStateToProps = ({ exchangeRates }) => ({
+const mapStateToProps = ({ exchangeRates, baseCurrencies }) => ({
   exchangeRates,
+  baseCurrencies,
 });
 
 export default connect(mapStateToProps)(ExchangePage);
