@@ -6,6 +6,7 @@ import handleInitialData from "../actions/shared";
 import ExchangePage from "./ExchangePage";
 import Layout from "./Layout";
 import NewCurrency from "./NewCurrency";
+import Auth from "./Auth";
 
 class App extends Component {
   state = {
@@ -20,6 +21,7 @@ class App extends Component {
     return (
       <Layout>
         <Switch>
+          <Route path='/auth' component={Auth} />
           <Route path='/add' component={NewCurrency} />
           <Route path='/' exact component={ExchangePage} />
         </Switch>
