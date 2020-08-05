@@ -107,7 +107,7 @@ class Auth extends Component {
   };
 
   render() {
-    const { isAuthenticated, error: errorLogin } = this.props.login;
+    const { isAuthenticated, isLogging, errorLogin } = this.props;
     const { email, password } = this.state.inputs;
     const { displayLoginForm } = this.state;
 
@@ -125,6 +125,12 @@ class Auth extends Component {
         </p>
       ));
     }
+
+    let loginBtnValue = "Log In";
+    if (isLogging === true) {
+      loginBtnValue += "...";
+    }
+
     const formInputs = (
       <>
         <div className='form__group'>
@@ -157,9 +163,13 @@ class Auth extends Component {
           {formInputs}
           <input
             className='btn btn-green btn-submit'
-            disabled={email.valid === false || password.valid === false}
+            disabled={
+              email.valid === false ||
+              password.valid === false ||
+              isLogging === true
+            }
             type='submit'
-            value='Log In'
+            value={loginBtnValue}
           />
         </form>
         <div className='auth-toggle-form-text' onClick={this.toggleLoginForm}>
@@ -203,7 +213,9 @@ class Auth extends Component {
 }
 
 const mapStateToProps = ({ login }) => ({
-  login,
+  isAuthenticated: login.token !== null ? true : false,
+  isLogging: login.loading,
+  errorLogin: login.error,
 });
 
 export default connect(mapStateToProps)(Auth);

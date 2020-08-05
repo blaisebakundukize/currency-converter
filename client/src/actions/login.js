@@ -2,6 +2,11 @@ import axios from "axios";
 
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
+export const LOGIN_START = "LOGIN_START";
+
+export const loginStart = () => ({
+  type: LOGIN_START,
+});
 
 export const loginSuccess = (token) => ({
   type: LOGIN_SUCCESS,
@@ -16,6 +21,7 @@ export const loginFail = (error) => ({
 export function login(email, password) {
   return async (dispatch) => {
     try {
+      dispatch(loginStart());
       const response = await axios.post("/api/user/token/", {
         email,
         password,
@@ -25,7 +31,6 @@ export function login(email, password) {
       let errorMessage = null;
       if (error.response.data) {
         errorMessage = error.response.data.non_field_errors.join("&&");
-        console.log(errorMessage);
       } else {
         errorMessage = "Something went wrong. Check your internet connection.";
       }

@@ -1,25 +1,31 @@
-import { LOGIN_SUCCESS, LOGIN_FAIL } from "../actions/login";
+import { LOGIN_SUCCESS, LOGIN_FAIL, LOGIN_START } from "../actions/login";
 
 const initialState = {
   token: null,
-  isAuthenticated: false,
   error: null,
+  loading: false,
 };
 
 const login = (state = initialState, action) => {
   switch (action.type) {
+    case LOGIN_START:
+      return {
+        ...state,
+        error: null,
+        loading: true,
+      };
     case LOGIN_SUCCESS:
       return {
         ...state,
         token: action.token,
-        isAuthenticated: true,
+        error: null,
+        loading: false,
       };
     case LOGIN_FAIL:
       return {
         ...state,
-        token: null,
-        isAuthenticated: false,
         error: action.error,
+        loading: false,
       };
     default:
       return state;
