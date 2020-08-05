@@ -3,6 +3,7 @@ import axios from "axios";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
 export const LOGIN_START = "LOGIN_START";
+export const LOGIN_RESET = "LOGIN_RESET";
 
 export const loginStart = () => ({
   type: LOGIN_START,
@@ -16,6 +17,10 @@ export const loginSuccess = (token) => ({
 export const loginFail = (error) => ({
   type: LOGIN_FAIL,
   error,
+});
+
+export const LoginReset = () => ({
+  type: LOGIN_RESET,
 });
 
 export function login(email, password) {

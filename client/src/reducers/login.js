@@ -1,4 +1,9 @@
-import { LOGIN_SUCCESS, LOGIN_FAIL, LOGIN_START } from "../actions/login";
+import {
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+  LOGIN_START,
+  LOGIN_RESET,
+} from "../actions/login";
 
 const initialState = {
   token: null,
@@ -27,6 +32,8 @@ const login = (state = initialState, action) => {
         error: action.error,
         loading: false,
       };
+    case LOGIN_RESET:
+      return initialState;
     default:
       return state;
   }

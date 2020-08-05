@@ -15,6 +15,8 @@
   --color-orange: #f45524;
   --color-yellow: #c59c15;
 
+  --color-blue: #4b92f5;
+
   /*--FONT--*/
   --default-font-size: 1.6rem;
 
@@ -109,6 +111,55 @@ li {
   margin-top: 5rem;
 }
 
+.btn,
+.btn:link,
+.btn:visited {
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 1rem 4rem;
+  display: inline-block;
+  border-radius: 0.4rem;
+  font-size: 1.4rem;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+}
+
+.btn:hover {
+  opacity: 0.8;
+}
+
+.btn:hover::after {
+  opacity: 0;
+}
+
+.btn:active,
+.btn:focus {
+  outline: none;
+  font-weight: 700;
+}
+
+.btn-green {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  font-weight: 700;
+}
+
+.btn-submit {
+  width: 100%;
+  display: block;
+  margin-top: 1rem;
+}
+
+.center {
+  text-align: center;
+}
+
 .form-input {
   font-size: 1.5rem;
   font-family: inherit;
@@ -169,4 +220,43 @@ option[value=""][disabled] {
 option {
   color: var(--color-black);
   font-style: normal;
+}
+
+.auth form {
+  padding: 2rem;
+}
+
+.auth-title {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.auth-form-title {
+  font-size: 2.5rem;
+  color: var(--color-black-2);
+}
+
+.auth-toggle-form-text {
+  width: fit-content;
+  margin: 0 auto;
+  padding: 2px;
+  font-size: 1.4rem;
+  color: var(--color-blue);
+  cursor: pointer;
+}
+
+.error {
+  font-size: 1.4rem;
+  color: var(--color-orange);
+  margin-bottom: 1rem;
+}
+
+.text-success {
+  font-size: 1.6rem;
+  color: var(--color-green-dark);
+}
+
+.text-success span {
+  font-size: 1.6rem;
+  margin-left: 1rem;
 }
