@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-import { login } from "../actions/login";
+import { login, LoginReset } from "../actions/login";
+import { registerUser, registerUserReset } from "../actions/registeredUser";
 
 class Auth extends Component {
   state = {
@@ -21,6 +22,14 @@ class Auth extends Component {
         validation: {
           required: true,
           minLength: 6,
+        },
+      },
+      name: {
+        value: "",
+        valid: false,
+        validation: {
+          required: true,
+          minLength: 2,
         },
       },
     },
@@ -50,6 +59,14 @@ class Auth extends Component {
 
   handleRegister = (event) => {
     event.preventDefault();
+    const { email, password, name } = this.state.inputs;
+    this.props.dispatch(
+      registerUser({
+        email: email.value,
+        password: password.value,
+        name: name.value,
+      })
+    );
   };
 
   checkValidity = (value, rules) => {
@@ -87,6 +104,8 @@ class Auth extends Component {
   };
 
   toggleLoginForm = () => {
+    this.props.dispatch(LoginReset());
+    this.props.dispatch(registerUserReset());
     this.setState((state) => ({
       ...state,
       inputs: {
@@ -101,14 +120,26 @@ class Auth extends Component {
           value: "",
           valid: false,
         },
+        name: {
+          ...state.inputs.name,
+          value: "",
+          valid: false,
+        },
       },
       displayLoginForm: !state.displayLoginForm,
     }));
   };
 
   render() {
-    const { isAuthenticated, isLogging, errorLogin } = this.props;
-    const { email, password } = this.state.inputs;
+    const {
+      isAuthenticated,
+      isLogging,
+      errorLogin,
+      isRegistered,
+      isRegistering,
+      errorRegister,
+    } = this.props;
+    const { email, password, name } = this.state.inputs;
     const { displayLoginForm } = this.state;
 
     if (isAuthenticated === true) {
@@ -129,6 +160,31 @@ class Auth extends Component {
     let loginBtnValue = "Log In";
     if (isLogging === true) {
       loginBtnValue += "...";
+    }
+
+    let displaySuccessRegistered = null;
+    if (isRegistered === true) {
+      displaySuccessRegistered = (
+        <p className='text-success center'>
+          Registered Successfully.
+          <span
+            className='auth-toggle-form-text'
+            onClick={this.toggleLoginForm}
+          >
+            Login Here
+          </span>
+        </p>
+      );
+    }
+
+    let displayRegisterErrors = null;
+    if (errorRegister !== null) {
+      const errors = errorRegister.split("&&");
+      displayRegisterErrors = errors.map((error, i) => (
+        <p className='error' key={i}>
+          {error}
+        </p>
+      ));
     }
 
     const formInputs = (
@@ -181,10 +237,25 @@ class Auth extends Component {
     const registerForm = (
       <>
         <form onSubmit={this.handleRegister}>
+          {displayRegisterErrors}
           {formInputs}
+          <div className='form__group'>
+            <input
+              className='form-input'
+              type='text'
+              placeholder='Name'
+              value={name.value}
+              onChange={(event) => this.handleChange(event, "name")}
+            />
+          </div>
           <input
             className='btn btn-green btn-submit'
-            disabled={email.valid === false || password.valid === false}
+            disabled={
+              email.valid === false ||
+              password.valid === false ||
+              name.valid === false ||
+              isRegistering === true
+            }
             type='submit'
             value='Sign Up'
           />
@@ -196,26 +267,35 @@ class Auth extends Component {
     );
 
     return (
-      <div className='question auth'>
-        <div className='auth-header'>
-          <h3 className='auth-title center'>
-            {displayLoginForm === true ? "Log in" : "Sign up"} to create new
-            currency
-          </h3>
-        </div>
-        <h3 className='auth-form-title center'>
-          {displayLoginForm === true ? "Log In" : "Sign Up"}
-        </h3>
-        {displayLoginForm === true ? loginForm : registerForm}
+      <div className='auth'>
+        {displaySuccessRegistered !== null ? (
+          displaySuccessRegistered
+        ) : (
+          <>
+            <div className='auth-header'>
+              <h3 className='auth-title center'>
+                {displayLoginForm === true ? "Log in" : "Sign up"} to create new
+                currency
+              </h3>
+            </div>
+            <h3 className='auth-form-title center'>
+              {displayLoginForm === true ? "Log In" : "Sign Up"}
+            </h3>
+            {displayLoginForm === true ? loginForm : registerForm}
+          </>
+        )}
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ login }) => ({
+const mapStateToProps = ({ login, registeredUser }) => ({
   isAuthenticated: login.token !== null ? true : false,
   isLogging: login.loading,
   errorLogin: login.error,
+  isRegistered: registeredUser.user !== null ? true : false,
+  isRegistering: registeredUser.loading,
+  errorRegister: registeredUser.error,
 });
 
 export default connect(mapStateToProps)(Auth);
