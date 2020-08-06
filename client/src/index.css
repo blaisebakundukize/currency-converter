@@ -198,6 +198,10 @@ li {
   flex-grow: 1;
 }
 
+.disabled-input {
+  background-color: var(--color-grey-light);
+}
+
 .new-currency-info {
   font-size: 2.3rem;
   text-align: center;
@@ -254,6 +258,7 @@ option {
 .text-success {
   font-size: 1.6rem;
   color: var(--color-green-dark);
+  margin-bottom: 1rem;
 }
 
 .text-success span {

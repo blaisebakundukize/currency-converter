@@ -15,17 +15,17 @@ export const receiveBaseCurrencies = (bCurrencies) => {
 
 export const handleReceiveBaseCurrencies = () => {
   return (dispatch) => {
-    dispatch(
-      receiveBaseCurrencies([
-        {
-          id: 1,
-          base_currency: "usd",
-          value: "1",
-        },
-      ])
-    );
-    // return axios.get("/api/currency/base").then((response) => {
-    //   dispatch(receiveBaseCurrencies(response.data));
-    // });
+    // dispatch(
+    //   receiveBaseCurrencies([
+    //     {
+    //       id: 1,
+    //       base_currency: "usd",
+    //       value: "1",
+    //     },
+    //   ])
+    // );
+    return axios.get("/api/currency/base").then((response) => {
+      dispatch(receiveBaseCurrencies(response.data));
+    });
   };
 };

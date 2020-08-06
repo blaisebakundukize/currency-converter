@@ -183,9 +183,9 @@ class ExchangePage extends Component {
 }
 
 const mapStateToProps = ({ exchangeRates }) => {
-  const exchangeRateIds = Object.keys(exchangeRates);
+  const exchangeRateIds = Object.keys(exchangeRates.rates);
   return {
-    exchangeRates: exchangeRateIds.length > 0 ? exchangeRates : null,
+    exchangeRates: exchangeRateIds.length > 0 ? exchangeRates.rates : null,
   };
 };
 

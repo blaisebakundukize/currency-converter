@@ -290,10 +290,10 @@ class Auth extends Component {
 }
 
 const mapStateToProps = ({ login, registeredUser }) => ({
-  isAuthenticated: login.token !== null ? true : false,
+  isAuthenticated: login.token !== null,
   isLogging: login.loading,
   errorLogin: login.error,
-  isRegistered: registeredUser.user !== null ? true : false,
+  isRegistered: registeredUser.user !== null,
   isRegistering: registeredUser.loading,
   errorRegister: registeredUser.error,
 });
