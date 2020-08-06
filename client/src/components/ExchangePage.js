@@ -106,86 +106,89 @@ class ExchangePage extends Component {
     let exchangeForm = <p className='loading'>Loading form...</p>;
 
     if (exchangeRates !== null) {
-      const options = [];
-      const exchangeRateIds = Object.keys(exchangeRates);
-      exchangeRateIds.forEach((id) => {
-        options.push(
-          <option key={exchangeRates[id].id} value={exchangeRates[id].id}>
-            {exchangeRates[id].currency}
-          </option>
+      if (Object.keys(exchangeRates).length > 0) {
+        const options = [];
+        const exchangeRateIds = Object.keys(exchangeRates);
+        exchangeRateIds.forEach((id) => {
+          options.push(
+            <option key={exchangeRates[id].id} value={exchangeRates[id].id}>
+              {exchangeRates[id].currency}
+            </option>
+          );
+        });
+        exchangeForm = (
+          <form className='form' onSubmit={this.handleSubmit}>
+            <div className='form__control'>
+              <div className='form__group'>
+                <input
+                  className='form-input'
+                  type='number'
+                  placeholder='Enter value'
+                  value={inputOne.value}
+                  disabled={selectOne.value === "" || selectTwo.value === ""}
+                  onChange={(event) =>
+                    this.handleChange(event, "inputs", "inputOne")
+                  }
+                />
+              </div>
+              <div className='form__group'>
+                <select
+                  className='form-input select-placeholder'
+                  onChange={(event) =>
+                    this.handleChange(event, "selects", "selectOne")
+                  }
+                  value={selectOne.value}
+                  required
+                >
+                  <option key={0} value='' disabled>
+                    Select Currency
+                  </option>
+                  {options}
+                </select>
+              </div>
+            </div>
+            <div className='form__control'>
+              <div className='form__group'>
+                <input
+                  className='form-input'
+                  type='number'
+                  placeholder='Enter value'
+                  value={inputTwo.value}
+                  disabled={selectOne.value === "" || selectTwo.value === ""}
+                  onChange={(event) =>
+                    this.handleChange(event, "inputs", "inputTwo")
+                  }
+                />
+              </div>
+              <div className='form__group'>
+                <select
+                  className='form-input select-placeholder'
+                  onChange={(event) =>
+                    this.handleChange(event, "selects", "selectTwo")
+                  }
+                  value={selectTwo.value}
+                  required
+                >
+                  <option key={0} value='' disabled>
+                    Select Currency
+                  </option>
+                  {options}
+                </select>
+              </div>
+            </div>
+          </form>
         );
-      });
-      exchangeForm = (
-        <form className='form' onSubmit={this.handleSubmit}>
-          <div className='form__control'>
-            <div className='form__group'>
-              <input
-                className='form-input'
-                type='number'
-                placeholder='Enter value'
-                value={inputOne.value}
-                disabled={selectOne.value === "" || selectTwo.value === ""}
-                onChange={(event) =>
-                  this.handleChange(event, "inputs", "inputOne")
-                }
-              />
-            </div>
-            <div className='form__group'>
-              <select
-                className='form-input select-placeholder'
-                onChange={(event) =>
-                  this.handleChange(event, "selects", "selectOne")
-                }
-                value={selectOne.value}
-                required
-              >
-                <option key={0} value='' disabled>
-                  Select Currency
-                </option>
-                {options}
-              </select>
-            </div>
-          </div>
-          <div className='form__control'>
-            <div className='form__group'>
-              <input
-                className='form-input'
-                type='number'
-                placeholder='Enter value'
-                value={inputTwo.value}
-                disabled={selectOne.value === "" || selectTwo.value === ""}
-                onChange={(event) =>
-                  this.handleChange(event, "inputs", "inputTwo")
-                }
-              />
-            </div>
-            <div className='form__group'>
-              <select
-                className='form-input select-placeholder'
-                onChange={(event) =>
-                  this.handleChange(event, "selects", "selectTwo")
-                }
-                value={selectTwo.value}
-                required
-              >
-                <option key={0} value='' disabled>
-                  Select Currency
-                </option>
-                {options}
-              </select>
-            </div>
-          </div>
-        </form>
-      );
+      } else {
+        exchangeForm = <p className='loading'>Exchange Rates Not Found</p>;
+      }
     }
     return <div>{exchangeForm}</div>;
   }
 }
 
 const mapStateToProps = ({ exchangeRates }) => {
-  const exchangeRateIds = Object.keys(exchangeRates.rates);
   return {
-    exchangeRates: exchangeRateIds.length > 0 ? exchangeRates.rates : null,
+    exchangeRates: exchangeRates.rates,
   };
 };
 

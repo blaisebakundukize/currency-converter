@@ -7,7 +7,7 @@ import {
 } from "../actions/exchangeRates";
 
 const initialState = {
-  rates: {},
+  rates: null,
   errorAddExchangeRate: null,
   loadingAddExchangeRate: false,
   showSuccessMessage: false,
