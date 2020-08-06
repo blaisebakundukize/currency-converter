@@ -12,7 +12,7 @@ const Nav = () => {
         </li>
         <li>
           <NavLink to='/add' activeClassName='active'>
-            New Currency
+            Add Exchange Rate
           </NavLink>
         </li>
       </ul>
