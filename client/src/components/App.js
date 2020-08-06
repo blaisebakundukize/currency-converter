@@ -7,6 +7,7 @@ import ExchangePage from "./ExchangePage";
 import Layout from "./Layout";
 import NewCurrency from "./NewCurrency";
 import Auth from "./Auth";
+import ProtectedRoute from "./ProtectedRoute";
 
 class App extends Component {
   state = {
@@ -18,11 +19,16 @@ class App extends Component {
   }
 
   render() {
+    const { isAuthenticated } = this.props;
     return (
       <Layout>
         <Switch>
           <Route path='/auth' component={Auth} />
-          <Route path='/add' component={NewCurrency} />
+          <ProtectedRoute
+            isAuthenticated={isAuthenticated}
+            path='/add'
+            component={NewCurrency}
+          />
           <Route path='/' exact component={ExchangePage} />
         </Switch>
       </Layout>
@@ -30,4 +36,8 @@ class App extends Component {
   }
 }
 
-export default connect()(App);
+const mapStateToProps = ({ login }) => ({
+  isAuthenticated: login.token !== null,
+});
+
+export default connect(mapStateToProps)(App);
