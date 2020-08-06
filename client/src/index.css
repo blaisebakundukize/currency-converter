@@ -73,6 +73,7 @@ li {
   padding: 1rem;
   border-bottom: var(--line-medium-green);
   box-sizing: border-box;
+  position: relative;
 }
 
 .header h1 {
@@ -264,4 +265,17 @@ option {
 .text-success span {
   font-size: 1.6rem;
   margin-left: 1rem;
+}
+
+.logout {
+  position: absolute;
+  right: 1rem;
+  top: 8.5rem;
+  font-size: var(--default-font-size);
+  color: var(--color-blue);
+}
+
+.logout:hover {
+  cursor: pointer;
+  text-decoration: underline;
 }
