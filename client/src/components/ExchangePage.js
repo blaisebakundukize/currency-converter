@@ -33,21 +33,52 @@ class ExchangePage extends Component {
     this.setState({ [element]: updatedElement });
 
     if (elementName === "inputOne") {
-      this.convertCurrency({
+      this.onInputChangeConvertCurrency({
         amount: parseFloat(event.target.value),
         showIn: "inputTwo",
       });
     }
 
     if (elementName === "inputTwo") {
-      this.convertCurrency({
+      this.onInputChangeConvertCurrency({
         amount: parseFloat(event.target.value),
         showIn: "inputOne",
       });
     }
+
+    const { inputOne, inputTwo } = this.state.inputs;
+    const { selectOne, selectTwo } = this.state.selects;
+
+    if (
+      elementName === "selectOne" &&
+      inputOne.value !== "" &&
+      selectTwo.value !== ""
+    ) {
+      const { exchangeRates } = this.props;
+      this.onSelectChangeConvertCurrency({
+        amount: inputOne.value,
+        showIn: "inputTwo",
+        currencyOneRate: parseFloat(exchangeRates[event.target.value].value),
+        currencyTwoRate: parseFloat(exchangeRates[selectTwo.value].value),
+      });
+    }
+
+    if (
+      elementName === "selectTwo" &&
+      inputTwo.value !== "" &&
+      selectOne.value !== ""
+    ) {
+      const { exchangeRates } = this.props;
+      this.onSelectChangeConvertCurrency({
+        amount: inputTwo.value,
+        showIn: "inputOne",
+        currencyOneRate: parseFloat(exchangeRates[selectOne.value].value),
+        currencyTwoRate: parseFloat(exchangeRates[event.target.value].value),
+      });
+    }
   };
 
-  convertCurrency = (data) => {
+  onInputChangeConvertCurrency = (data) => {
     this.setState((state) => ({
       inputs: {
         ...state.inputs,
@@ -65,6 +96,14 @@ class ExchangePage extends Component {
       exchangeRates[this.state.selects.selectTwo.value].value
     );
 
+    this.convertCurrency(data, currencyOneRate, currencyTwoRate);
+  };
+
+  onSelectChangeConvertCurrency = (data) => {
+    this.convertCurrency(data, data.currencyOneRate, data.currencyTwoRate);
+  };
+
+  convertCurrency = (data, currencyOneRate, currencyTwoRate) => {
     if (data.showIn === "inputTwo") {
       const amount = (currencyTwoRate * data.amount) / currencyOneRate;
       this.setState((state) => {
