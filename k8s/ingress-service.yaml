@@ -28,12 +28,7 @@ spec:
             backend:
               serviceName: server-cluster-ip-service
               servicePort: 8000
-          - path: /static/admin?(.*)
-          # UPDATE THIS LINE ABOVE
-            backend:
-              serviceName: server-cluster-ip-service
-              servicePort: 8000
-          - path: /static/rest_framework/?(.*)
+          - path: /staticfiles/?(.*)
           # UPDATE THIS LINE ABOVE
             backend:
               serviceName: server-cluster-ip-service
