@@ -16,8 +16,15 @@ RUN mkdir /app
 WORKDIR /app
 COPY ./app/ /app
 
-RUN adduser -D bblaise
+RUN addgroup -S appgroup && adduser -S bblaise -G appgroup
+RUN chown bblaise:appgroup -R /app
 USER bblaise
+
+# RUN adduser -D bblaise
+# RUN chown bblaise:bblaise -R /app/
+
+# ENTRYPOINT [ "/app/entrypoint.sh" ]
+
 
 CMD ["python", "./manage.py", "runserver", "0.0.0.0:8000"]
 

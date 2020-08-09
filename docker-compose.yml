@@ -7,6 +7,8 @@ services:
       context: ./nginx
     ports:
       - '3050:80'
+    volumes:
+      - /staticfiles:/staticfiles
   client:
     tty: true
     build:
@@ -23,8 +25,10 @@ services:
       - "8000:8000"
     volumes:
       - ./server/app:/app
+      - /staticfiles:/staticfiles
     command: >
-      sh -c "python manage.py migrate &&
+      sh -c "python manage.py collectstatic --no-input &&
+             python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
     environment:
       - DB_HOST=db
