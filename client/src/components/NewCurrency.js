@@ -7,6 +7,7 @@ import {
   addExchangeRateRemoveSuccess,
 } from "../actions/exchangeRates";
 import NewBaseCurrency from "./NewBaseCurrency";
+import { checkValidity } from "../utils/helpers";
 
 class NewCurrency extends Component {
   state = {
@@ -84,27 +85,13 @@ class NewCurrency extends Component {
     }
   }
 
-  checkValidity = (value, rules) => {
-    let isValid = true;
-
-    if (rules.required) {
-      isValid = value.trim() !== "" && isValid;
-    }
-
-    if (rules.minLength) {
-      isValid = value.trim().length >= rules.minLength && isValid;
-    }
-
-    return isValid;
-  };
-
   handleChange = (event, inputName) => {
     const updatedInputs = {
       ...this.state.inputs,
       [inputName]: {
         ...this.state.inputs[inputName],
         value: event.target.value,
-        valid: this.checkValidity(
+        valid: checkValidity(
           event.target.value,
           this.state.inputs[inputName].validation
         ),
