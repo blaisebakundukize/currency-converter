@@ -6,6 +6,7 @@ import {
   addExchangeRate,
   addExchangeRateRemoveSuccess,
 } from "../actions/exchangeRates";
+import NewBaseCurrency from "./NewBaseCurrency";
 
 class NewCurrency extends Component {
   state = {
@@ -39,15 +40,19 @@ class NewCurrency extends Component {
     this.props.dispatch(handleReceiveBaseCurrencies());
   }
   componentDidUpdate(prevProps) {
-    if (this.props.base !== prevProps.base) {
+    if (
+      this.props.bases !== prevProps.bases &&
+      Object.keys(this.props.bases).length > 0
+    ) {
+      const base = this.props.bases[Object.keys(this.props.bases)[0]];
       this.setState((state) => ({
         ...state,
         inputs: {
           ...state.inputs,
           baseCurrency: {
             ...state.inputs.baseCurrency,
-            value: this.props.base.base_currency,
-            id: this.props.base.id,
+            value: base.base_currency,
+            id: base.id,
             valid: true,
           },
         },
@@ -126,6 +131,7 @@ class NewCurrency extends Component {
       isAddingExchangeRate,
       errorAddExchangeRate,
       showSuccessMessage,
+      bases: baseCurrencies,
     } = this.props;
 
     let baseCurrencyInputClasses = "form-input";
@@ -135,7 +141,7 @@ class NewCurrency extends Component {
 
     let nameBtnCreate = "Create";
     if (isAddingExchangeRate === true) {
-      nameBtnCreate += "...";
+      nameBtnCreate = "Creating...";
     }
 
     let successMessage = null;
@@ -156,63 +162,91 @@ class NewCurrency extends Component {
       ));
     }
 
-    return (
-      <div className='auth'>
-        <div className='auth-header'>
-          <h3 className='auth-title center'>Create New Exchange Rate</h3>
-        </div>
-        <form onSubmit={this.handleRegister}>
-          {successMessage}
-          {displayAddExchangeRateErrors}
-          <div className='form__group'>
-            <input
-              className='form-input'
-              type='text'
-              placeholder='Currency Name'
-              value={currency.value}
-              onChange={(event) => this.handleChange(event, "currency")}
-            />
-          </div>
-          <div className='form__group'>
-            <input
-              className={baseCurrencyInputClasses}
-              type='text'
-              placeholder='Base Currency'
-              value={baseCurrency.value}
-              disabled
-            />
-          </div>
-          <div className='form__group'>
-            <input
-              className='form-input'
-              type='number'
-              placeholder='Value'
-              value={value.value}
-              onChange={(event) => this.handleChange(event, "value")}
-            />
-          </div>
+    let form = (
+      <form onSubmit={this.handleRegister}>
+        {successMessage}
+        {displayAddExchangeRateErrors}
+        <div className='form__group'>
           <input
-            className='btn btn-green btn-submit'
-            disabled={
-              currency.valid === false ||
-              baseCurrency.valid === false ||
-              value.valid === false ||
-              isAddingExchangeRate === true ||
-              showSuccessMessage === true
-            }
-            type='submit'
-            value={nameBtnCreate}
+            className='form-input'
+            type='text'
+            placeholder='Currency Name'
+            value={currency.value}
+            onChange={(event) => this.handleChange(event, "currency")}
           />
-        </form>
+        </div>
+        <div className='form__group'>
+          <input
+            className={baseCurrencyInputClasses}
+            type='text'
+            placeholder='Base Currency'
+            value={baseCurrency.value}
+            disabled
+          />
+        </div>
+        <div className='form__group'>
+          <input
+            className='form-input'
+            type='number'
+            placeholder='Value'
+            value={value.value}
+            onChange={(event) => this.handleChange(event, "value")}
+          />
+        </div>
+        <input
+          className='btn btn-green btn-submit'
+          disabled={
+            currency.valid === false ||
+            baseCurrency.valid === false ||
+            value.valid === false ||
+            isAddingExchangeRate === true ||
+            showSuccessMessage === true
+          }
+          type='submit'
+          value={nameBtnCreate}
+        />
+      </form>
+    );
+
+    let formTitle = "Create New Exchange Rate";
+
+    // Set loading message if baseCurrency is null
+    if (baseCurrencies === null) {
+      form = <p className='loading'>Loading form...</p>;
+      formTitle = null;
+    }
+
+    let baseCurrencyNB = null;
+
+    // Check if Base currencies is empty to show the form to add one
+    if (baseCurrencies !== null && Object.keys(baseCurrencies).length === 0) {
+      form = <NewBaseCurrency></NewBaseCurrency>;
+      baseCurrencyNB = (
+        <p className='center'>
+          <span className='nb'>NB: </span>
+          <span className='message'>
+            Creating an Exchange Rate requires a Base Currency, which is not yet
+            set. Use the following form to create one!
+          </span>
+        </p>
+      );
+      formTitle = "Create Base Currency";
+    }
+    return (
+      <div className='new-currency'>
+        <div className='new-currency-header'>
+          {baseCurrencyNB}
+          <h3 className='new-currency-title center'>{formTitle}</h3>
+        </div>
+        {form}
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ baseCurrencies, exchangeRates }) => {
-  const bcIds = Object.keys(baseCurrencies);
+const mapStateToProps = ({ baseCurrency, exchangeRates }) => {
   return {
-    base: bcIds.length > 0 ? baseCurrencies[bcIds[0]] : null,
+    bases: baseCurrency.bases,
     isAddingExchangeRate: exchangeRates.loadingAddExchangeRate,
     errorAddExchangeRate: exchangeRates.errorAddExchangeRate,
     showSuccessMessage: exchangeRates.showSuccessMessage,
