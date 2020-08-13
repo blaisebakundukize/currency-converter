@@ -6,6 +6,10 @@ Currency Converter app is a simple app for exchanging currencies. It is built on
 
 - [Currency Converter](http://34.72.133.196/)
 
+## Technologies
+
+`Docker, Kubernetes, Nginx, Docker Compose, Django, Django REST framework, React`
+
 ## Process to run this app
 
 > To get started running the app:
@@ -66,3 +70,17 @@ Currency Converter app is a simple app for exchanging currencies. It is built on
 - `GET /api/currency/exchange_rates/{id}`
 - `PUT /api/currency/exchange_rates/{id}`
 - `DEL /api/currency/exchange_rates/{id}`
+
+## Deployment
+
+This app was deployed on Google Kubernetes Engine (GKE).
+
+- Docker images (client&server) are pushed on my docker hub as public
+
+## Authors
+
+- [Blaise Bakundukize](https://github.com/blaisebakundukize) - Initial work
+
+## License
+
+This project is licensed under the MIT License
